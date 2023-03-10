@@ -47,6 +47,7 @@ class Partit(models.Model):
                     related_name="partits_visitant")
     lliga = models.ForeignKey(Lliga,on_delete=models.CASCADE)
     detalls = models.TextField(null=True,blank=True)
+    inici = models.DateTimeField(null=True,blank=True)
     def __str__(self):
         return "{} - {}".format(self.local,self.visitant)
 
@@ -63,7 +64,7 @@ class Event(models.Model):
         TARGETA_GROGA = "TARGETA_GROGA"
         TARGETA_VERMELLA = "TARGETA_VERMELLA"
     partit = models.ForeignKey(Partit,on_delete=models.CASCADE)
-    temps = models.TimeField(auto_now=True)
+    temps = models.TimeField()
     tipus = models.CharField(max_length=30,choices=EventType.choices)
     jugador = models.ForeignKey(Jugador,null=True,
                     on_delete=models.SET_NULL,

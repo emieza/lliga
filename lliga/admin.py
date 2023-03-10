@@ -15,6 +15,6 @@ admin.site.register(Partit)
 
 
 class EventAdmin(admin.ModelAdmin):
-	list_display = ["partit","tipus","jugador","temps"]
+	list_display = ["partit","temps","tipus","equip","jugador"]
 admin.site.register(Event,EventAdmin)
 
