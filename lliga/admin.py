@@ -4,10 +4,17 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Lliga)
+class LligaAdmin(admin.ModelAdmin):
+	filter_horizontal = ["equips"]
+admin.site.register(Lliga,LligaAdmin)
+
 admin.site.register(Equip)
 admin.site.register(Jugador)
 admin.site.register(Fitxa)
 admin.site.register(Partit)
-admin.site.register(Event)
+
+
+class EventAdmin(admin.ModelAdmin):
+	list_display = ["partit","tipus","jugador","temps"]
+admin.site.register(Event,EventAdmin)
 

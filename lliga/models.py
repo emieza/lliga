@@ -34,10 +34,13 @@ class Fitxa(models.Model):
                     on_delete=models.SET_NULL)
     inici = models.DateField()
     final = models.DateField(null=True,blank=True)
+    dorsal = models.IntegerField()
     def __str__(self):
         return "{} : {} {}".format(self.equip,self.jugador.nom,self.jugador.cognom1)
 
 class Partit(models.Model):
+    class Meta:
+        unique_together = ["local","visitant","lliga"]
     local = models.ForeignKey(Equip,on_delete=models.CASCADE,
                     related_name="partits_local")
     visitant = models.ForeignKey(Equip,on_delete=models.CASCADE,
@@ -45,7 +48,7 @@ class Partit(models.Model):
     lliga = models.ForeignKey(Lliga,on_delete=models.CASCADE)
     detalls = models.TextField(null=True,blank=True)
     def __str__(self):
-        return "{} - {}".format(self.local,self.visistant)
+        return "{} - {}".format(self.local,self.visitant)
 
 class Event(models.Model):
     class EventType(models.TextChoices):
@@ -68,7 +71,7 @@ class Event(models.Model):
     equip = models.ForeignKey(Equip,null=True,
                     on_delete=models.SET_NULL)
     # per les faltes
-    jugador2 = models.ForeignKey(Jugador,null=True,
+    jugador2 = models.ForeignKey(Jugador,null=True,blank=True,
                     on_delete=models.SET_NULL,
                     related_name="events2")
     detalls = models.TextField(null=True,blank=True)
