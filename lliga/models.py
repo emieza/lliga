@@ -25,7 +25,9 @@ class Jugador(models.Model):
     cognom2 = models.CharField(max_length=50)
     detalls = models.TextField(null=True,blank=True)
     def __str__(self):
-        return "{} {} \"{}\"".format(self.nom,self.cognom1,self.alias)
+        equip_actual = self.fitxa_set.filter(final=None).first()
+        return "{} {} \"{}\" ({})".format(self.nom,self.cognom1,
+                self.alias,equip_actual.equip)
 
 class Fitxa(models.Model):
     equip = models.ForeignKey(Equip,null=True,
@@ -68,12 +70,12 @@ class Event(models.Model):
     tipus = models.CharField(max_length=30,choices=EventType.choices)
     jugador = models.ForeignKey(Jugador,null=True,
                     on_delete=models.SET_NULL,
-                    related_name="events")
+                    related_name="events_fets")
     equip = models.ForeignKey(Equip,null=True,
                     on_delete=models.SET_NULL)
     # per les faltes
     jugador2 = models.ForeignKey(Jugador,null=True,blank=True,
                     on_delete=models.SET_NULL,
-                    related_name="events2")
+                    related_name="events_rebuts")
     detalls = models.TextField(null=True,blank=True)
 

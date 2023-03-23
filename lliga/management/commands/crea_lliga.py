@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from faker import Faker
-from datetime import timedelta
+from datetime import timedelta, time
 from random import randint
 
 from lliga.models import *
@@ -60,3 +60,25 @@ class Command(BaseCommand):
                     partit.visitant = visitant
                     partit.lliga = lliga
                     partit.save()
+                    # crea gols (events)
+                    for i in range(randint(0,6)):
+                        loc_or_visit = randint(0,1)
+                        numjug = randint(0,20)
+                        if loc_or_visit:
+                            gol = Event(
+                                tipus=Event.EventType.GOL,
+                                partit=partit,
+                                temps=time(0,randint(0,59),randint(0,59)),
+                                equip=local,
+                                jugador=local.fitxa_set.all()[numjug].jugador,
+                                )
+                            gol.save()
+                        else:
+                            gol = Event(
+                                tipus=Event.EventType.GOL,
+                                partit=partit,
+                                temps=time(0,randint(0,59),randint(0,59)),
+                                equip=visitant,
+                                jugador=local.fitxa_set.all()[numjug].jugador,
+                                )
+                            gol.save()
