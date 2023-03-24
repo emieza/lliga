@@ -41,7 +41,7 @@ class Command(BaseCommand):
             lliga.equips.add(equip)
 
             print("Creem jugadors de l'equip "+nom)
-            for i in range(25):
+            for j in range(25):
                 nom = faker.first_name()
                 cognom1 = faker.last_name()
                 cognom2 = faker.last_name()

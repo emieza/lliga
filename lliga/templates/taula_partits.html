@@ -1,7 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style type="text/css">
+		td,th {
+			border-top: 1px solid black;
+			text-align: center;
+		}
+		.verti {
+			writing-mode: vertical-lr;
+			text-orientation: mixed;
+		}
+	</style>
+</head>
+<body>
+
 <h1>Partits</h1>
 
-<ul>
-{% for partit in lliga.partit_set.all %}
-	<li>{{partit}} : {{partit.gols_local}}-{{partit.gols_visitant}}</li>
-{% endfor %}
-</ul>
+<table>
+    {% for row in resultats %}
+    {% if forloop.first %}
+    <tr class="verti">
+    {% else %}
+    <tr>
+    {% endif %}
+    {% for cell in row %}
+        {% if forloop.first or forloop.parentloop.first %} <th> {% else %} <td> {% endif %}
+            {{ cell }}
+        {% if forloop.first or forloop.parentloop.first %} </th> {% else %} </td> {% endif %}
+    {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+
+</body>
+</html>

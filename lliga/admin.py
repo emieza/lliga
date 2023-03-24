@@ -25,6 +25,11 @@ class EventInline(admin.TabularInline):
             jugadors_visitant = [fitxa.jugador.id for fitxa in partit.visitant.fitxa_set.all()]
             jugadors = jugadors_local + jugadors_visitant
             kwargs["queryset"] = Jugador.objects.filter(id__in=jugadors)
+        elif db_field.name == "equip":
+            partit_id = request.resolver_match.kwargs['object_id']
+            partit = Partit.objects.get(id=partit_id)
+            equips = [ partit.local.id, partit.visitant.id ]
+            kwargs["queryset"] = Equip.objects.filter(id__in=equips)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)            
 class PartitAdmin(admin.ModelAdmin):
         # podem fer cerques en els models relacionats

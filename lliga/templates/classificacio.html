@@ -1,2 +1,7 @@
 <h1>Classificació</h1>
 
+<ol>
+{% for equip in classificacio %}
+	<li>{{equip.1}} ({{equip.0}} punts)</li>
+{% endfor %}
+</ol>
