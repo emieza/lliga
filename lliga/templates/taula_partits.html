@@ -1,0 +1,7 @@
+<h1>Partits</h1>
+
+<ul>
+{% for partit in lliga.partit_set.all %}
+	<li>{{partit}} : {{partit.gols_local}}-{{partit.gols_visitant}}</li>
+{% endfor %}
+</ul>

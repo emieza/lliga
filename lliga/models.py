@@ -52,6 +52,12 @@ class Partit(models.Model):
     inici = models.DateTimeField(null=True,blank=True)
     def __str__(self):
         return "{} - {}".format(self.local,self.visitant)
+    def gols_local(self):
+        return self.event_set.filter(
+            tipus=Event.EventType.GOL,equip=self.local).count()
+    def gols_visitant(self):
+        return self.event_set.filter(
+            tipus=Event.EventType.GOL,equip=self.visitant).count()
 
 class Event(models.Model):
     class EventType(models.TextChoices):
