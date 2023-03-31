@@ -79,6 +79,6 @@ class Command(BaseCommand):
                                 partit=partit,
                                 temps=time(0,randint(0,59),randint(0,59)),
                                 equip=visitant,
-                                jugador=local.fitxa_set.all()[numjug].jugador,
+                                jugador=visitant.fitxa_set.all()[numjug].jugador,
                                 )
                             gol.save()
