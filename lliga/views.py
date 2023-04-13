@@ -6,13 +6,13 @@ from lliga.models import *
 
 # Create your views here.
 
-class MenuForm(forms.Form):
+class TriaLligaForm(forms.Form):
     lliga = forms.ModelChoiceField(queryset=Lliga.objects.all())
 
 def menu(request):
-    form = MenuForm()
+    form = TriaLligaForm()
     if request.method == "POST":
-        form = MenuForm(request.POST)
+        form = TriaLligaForm(request.POST)
         if form.is_valid():
             lliga = form.cleaned_data.get("lliga")
             return redirect('classificacio',lliga.id)
@@ -45,6 +45,7 @@ def classificacio(request,lliga_id=None):
     classi.sort(reverse=True)
     return render(request,"classificacio.html",
                 {
+                    "lliga":lliga,
                     "classificacio":classi,
                 })
 
@@ -73,6 +74,7 @@ def classificacio2(request,lliga_id=None):
     classi.sort(reverse=True)
     return render(request,"classificacio.html",
                 {
+                    "lliga":lliga,
                     "classificacio":classi,
                 })
 
@@ -107,4 +109,58 @@ def taula_partits(request):
                     "resultats": resultats,
                 })
 
+
+class LligaForm(forms.ModelForm):
+    class Meta:
+        model = Lliga
+        exclude = []
+
+def crea_lliga(request):
+    form = LligaForm()
+    message = ""
+    if request.method == "POST":
+        form = LligaForm(request.POST)
+        if form.is_valid():
+            titol = form.cleaned_data.get("titol")
+            lliga2 = Lliga.objects.filter(titol=titol)
+            if lliga2.count() > 0:
+                message = "El nom de la lliga ja existeix, posa'n un altre"
+            else:
+                form.save()
+                message = "Lliga '{}' guardada".format(titol)
+                form = LligaForm()
+    return render(  request, "crea_lliga.html",
+                    {"form":form,"message":message})
+
+class PartitForm(forms.Form):
+    local = forms.ModelChoiceField(queryset=Equip.objects.all())
+    visitant = forms.ModelChoiceField(queryset=Equip.objects.all())
+
+def crea_partit(request,lliga_id=None):
+    message = ""
+    if not lliga_id:
+        if request.method=="GET":
+            # PAS 1: triar lliga
+            form = TriaLligaForm()
+            return render(request,"crea_partit.html",{"form":form})
+        else:
+            # PAS 2: anar a seleccionar equips
+            form = TriaLligaForm(request.POST)
+            if form.is_valid():
+                lliga = form.cleaned_data.get("lliga")
+                return redirect("crea_partit2",lliga.id)
+    # PAS 3: triar equips del partit
+    if request.method=="GET":
+        form = PartitForm()
+        return render(request,"crea_partit.html",{"form":form})
+    else:
+        form = PartitForm(request.POST)
+        if form.is_valid():
+            message = "Funció encara no implementada"
+        return render(request,"crea_partit.html",{"form":form,"message":message})
+
+
+
+def edita_partit(request,partit_id=None):
+    return render(request,"not_implemented.html")
 

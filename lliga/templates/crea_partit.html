@@ -1,0 +1,10 @@
+<h1>Crea partit</h1>
+
+<p>{{message}}</p>
+
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<br>
+	<button>Envia</button>
+</form>
