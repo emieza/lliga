@@ -12,4 +12,5 @@ urlpatterns = [
     path('crea_partit', views.crea_partit, name="crea_partit" ),
     path('crea_partit/<int:lliga_id>', views.crea_partit, name="crea_partit2" ),
     path('edita_partit/<int:partit_id>', views.edita_partit ),
+    path('edita_partit_advanced/', views.edita_partit_advanced ),
 ]

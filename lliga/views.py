@@ -164,3 +164,6 @@ def crea_partit(request,lliga_id=None):
 def edita_partit(request,partit_id=None):
     return render(request,"not_implemented.html")
 
+
+def edita_partit_advanced(request):
+    return render(request,"edita_partit_advanced.html")
