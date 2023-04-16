@@ -9,27 +9,90 @@
 
 <h1>Editar partit</h1>
 
-Selecciona lliga:
-<select id="lliga" name="lliga">
-</select>
+<p style="color:red">{{message}}</p>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+{% if partit %}
 
-<script type="text/javascript">
-$.ajax({
-  method: "GET",
-  url: "/api/get_lligues",
-  dataType: "json",   // necessitem això pq ens retorni un objecte JSON
-}).done(function (msg) {
-  for(let item in msg) {
-    console.log(msg[item]);
-    var opt = $('<option value="'+msg[item].id+'">'+msg[item].titol+'</option>');
-    $('#lliga').append(opt);
-  };
-}).fail(function () {
-	alert("ERROR");
-});
-</script>
+  <p>Edita el partit: <a href="/lliga/edita_partit/{{partit.id}}">{{partit.local}} - {{partit.visitant}}</a></p>
+
+{% else %}
+
+  <form method="post">
+    {% csrf_token %}
+    <br>
+    Selecciona lliga:
+    <br>
+    <select id="lliga" name="lliga">
+      <option>...selecciona lliga...</option>
+    </select>
+
+    <br>
+    <br>
+    Selecciona equip local:
+    <br>
+    <select id="local" name="local">
+    </select>
+
+    <br>
+    <br>
+    Selecciona equip visitant:
+    <br>
+    <select id="visitant" name="visitant">
+    </select>
+
+    <br>
+    <br>
+    <button id="crea_partit" disabled>Crea partit</button>
+    <br>
+  </form>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <script type="text/javascript">
+  $.ajax({
+    method: "GET",
+    url: "/api/get_lligues",
+    dataType: "json",
+  }).done(function (msg) {
+    for(let item in msg) {
+      var opt = $('<option value="'+msg[item].id+'">'+msg[item].titol+'</option>');
+      $('#lliga').append(opt);
+    };
+  }).fail(function () {
+  	alert("ERROR");
+  });
+
+
+  $('#lliga').change(function() {
+    // al canviar la lliga, afegim els equips implicats
+    var lliga_id = $(this).children(":selected").attr("value");
+
+    $.ajax({
+      method: "GET",
+      url: "/api/get_equips/"+lliga_id,
+      dataType: "json",
+    }).done(function (msg) {
+      // buidem els selectors
+      $('#local').empty()
+      $('#visitant').empty()
+
+      for(let item in msg) {
+        var opt = $('<option value="'+msg[item].id+'">'+msg[item].nom+'</option>');
+        $('#local').append(opt);
+        var opt = $('<option value="'+msg[item].id+'">'+msg[item].nom+'</option>');
+        $('#visitant').append(opt);
+      };
+
+      $('#crea_partit').removeAttr('disabled');
+    }).fail(function () {
+      alert("ERROR");
+    });
+
+  })
+
+  </script>
+
+{% endif %}
 
 </body>
 </html>

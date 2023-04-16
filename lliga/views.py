@@ -166,4 +166,25 @@ def edita_partit(request,partit_id=None):
 
 
 def edita_partit_advanced(request):
-    return render(request,"edita_partit_advanced.html")
+    message = ""
+    partit = None
+    if request.method=="POST":
+        lliga_id = request.POST.get("lliga")
+        local_id = request.POST.get("local")
+        visitant_id = request.POST.get("visitant")
+        if local_id == visitant_id:
+            message = "Has seleccionat el mateix equip 2 cops."
+        else:
+            partit = Partit.objects.filter(local__id=local_id,visitant__id=visitant_id)
+            if partit:
+                message = "El partit ja existeix. Inicia l'edició."
+                partit = partit.get()
+            else:
+                lliga = Lliga.objects.get(pk=lliga_id)
+                local = Equip.objects.get(pk=local_id)
+                visitant = Equip.objects.get(pk=visitant_id)
+                partit = Partit(lliga=lliga,local=local,visitant=visitant)
+                partit.save()
+                message = "Partit creat correctament"
+    return render(request,"edita_partit_advanced.html",{"message":message,"partit":partit})
+
