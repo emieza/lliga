@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django import forms
 from django.shortcuts import redirect
+from memoize import memoize, delete_memoized, delete_memoized_verhash
 
 from lliga.models import *
 
-# Create your views here.
 
 class TriaLligaForm(forms.Form):
     lliga = forms.ModelChoiceField(queryset=Lliga.objects.all())
@@ -50,6 +50,7 @@ def classificacio(request,lliga_id=None):
                 })
 
 # optimització
+@memoize(timeout=60)
 def classificacio2(request,lliga_id=None):
     lliga = Lliga.objects.first()
     if lliga_id:
