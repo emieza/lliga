@@ -2,8 +2,14 @@ from django.shortcuts import render
 from django import forms
 from django.shortcuts import redirect
 from memoize import memoize, delete_memoized, delete_memoized_verhash
+from django.contrib.auth.decorators import login_required
 
 from lliga.models import *
+
+
+@login_required
+def profile(request):
+    return render(request,"registration/profile.html")
 
 
 class TriaLligaForm(forms.Form):
