@@ -2,6 +2,7 @@
 /env/
 /venv/
 /static/*
+/staticfiles/*
 /media/*
 .env
 db.sqlite3
