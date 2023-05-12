@@ -19,11 +19,14 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from lliga.views import profile
+from lliga import views as lligaviews
 
 urlpatterns = [
+    path('', lligaviews.menu),
     path('admin/', admin.site.urls),
     path('lliga/', include('lliga.urls')),
     path('api/', include('lliga.apiurls')),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/profile/", profile, name="profile"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

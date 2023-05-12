@@ -6,6 +6,7 @@ from lliga import views
 urlpatterns = [
     path('menu', views.menu),
     path('taula_partits', views.taula_partits ),
+    path('taula_partits/<int:lliga_id>', views.taula_partits, name="taula_partits" ),
     path('classificacio', views.classificacio2 ),
     path('classificacio/<int:lliga_id>', views.classificacio2, name="classificacio"),
     path('crea_lliga', views.crea_lliga ),

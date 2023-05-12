@@ -12,8 +12,11 @@ def profile(request):
     return render(request,"registration/profile.html")
 
 
+OPCIONS_MENU = ((1,"Classificació"),(2,"Resultats de partits"))
 class TriaLligaForm(forms.Form):
     lliga = forms.ModelChoiceField(queryset=Lliga.objects.all())
+    opcio = forms.ChoiceField(  choices=OPCIONS_MENU,
+                                widget=forms.RadioSelect)
 
 def menu(request):
     form = TriaLligaForm()
@@ -21,7 +24,10 @@ def menu(request):
         form = TriaLligaForm(request.POST)
         if form.is_valid():
             lliga = form.cleaned_data.get("lliga")
-            return redirect('classificacio',lliga.id)
+            if form.cleaned_data.get("opcio")=="1":
+                return redirect('classificacio',lliga.id)
+            else:
+                return redirect('taula_partits',lliga.id)
     return render(request, "menu.html",{
                     "form": form,
             })
@@ -86,11 +92,12 @@ def classificacio2(request,lliga_id=None):
                 })
 
 
-
-def taula_partits(request):
+def taula_partits(request,lliga_id=None):
     # per mostrar la taula de partits, creem una matriu (resultats)
     # per renderitzar-la després de forma senzilla a la view
     lliga = Lliga.objects.first()
+    if lliga_id:
+        lliga = Lliga.objects.get(pk=lliga_id)
     equips = [ equip.nom for equip in lliga.equips.order_by("nom") ]
     resultats = []
     resultats.append( [""] + equips )
